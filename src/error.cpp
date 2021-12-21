@@ -66,7 +66,7 @@ double f2_q6(double x[], size_t dim, void * p)
 int main()
 {    
     size_t calls = int(4e6);                  // Number of samples used in Monte Carlo integration
-    double limit = 0.1;                       // Upper integration bound on Q1 and Q2
+    double limit = 0.1; //0.55                // Upper integration bound on Q1 and Q2
 
 
     // Variables to store results
@@ -101,6 +101,7 @@ int main()
     gsl_monte_miser_integrate (&G2, xl, xu, 3, calls, r, s,
                                 &res2, &err2);
 
+    // Uncomment this if you also want the accuracy of the Q^4 approximation
     gsl_monte_miser_integrate (&G3, xl, xu, 3, calls, r, s,
                             &res3, &err3);
 
@@ -120,9 +121,11 @@ int main()
     double Q6 = pow(alpha/M_PI, 3) * (res5 + res6);
 
     std::cout.precision(10);
+    std::cout << "Integration to Q < " << limit << "\n";
     std::cout << "Integral 1 (LMD+V):\t" << res1 << "\tSigma: " <<  err1 << "\n";
     std::cout << "Integral 2 (LMD+V):\t" << res2 << "\tSigma: " <<  err2 << "\n";
     std::cout << std::endl;
+    // Uncomment this(and the print statements below) if you also want the accuracy of the Q^4 approximation
     std::cout << "Integral 1 (Q4)   :\t" << res3 << "\tSigma: " <<  err3 << "\n";
     std::cout << "Integral 2 (Q4)   :\t" << res4 << "\tSigma: " <<  err4 << "\n";
     std::cout << std::endl;

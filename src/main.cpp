@@ -42,7 +42,7 @@ double f2(double x[], size_t dim, void * p)
 
 int main()
 { 
-  double const limit = 20;                // Momentum cutoff for integration on Q1 and Q2
+  const double limit = 20;                // Momentum cutoff for integration on Q1 and Q2
 
 
   double res, err, res2, err2;
@@ -91,7 +91,7 @@ int main()
   std::cout.precision(17);
   std::cout << "Integral 1:\t" << res << "\tSigma: " <<  err << "\n";
   std::cout << "Integral 2:\t" << res2 << "\tSigma: " <<  err2 << "\n";
-  std::cout << "Final Result:\t" << pow(alpha/M_PI, 3) * (res + res2) << "\n\n";
+  std::cout << "Final Result:\t" << pow(alpha/pi, 3) * (res + res2) << "\n\n";
 
   gsl_monte_vegas_free (s);
   }
