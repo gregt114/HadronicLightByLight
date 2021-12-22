@@ -19,12 +19,12 @@
 // Defines parameter structure for integration
 struct params 
 {
-    double16 a;
-    double16 b;
-    double16 c;
-    double16 d;
-    double16 e;
-    double16 gamma;
+    double a;
+    double b;
+    double c;
+    double d;
+    double e;
+    double gamma;
 };
 
 // Function to integrate (integrand1)
@@ -150,8 +150,6 @@ int main()
     
 
     
-
-    // Value of the integral using the mean value for 'a'
     std::cout << "Calculating many integrals (may take a while...) " << std::endl << std::endl;
 
     // Values of integrals varying given parameter by given percent (takes ~ 5 min)

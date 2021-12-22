@@ -65,7 +65,7 @@ double f2_q6(double x[], size_t dim, void * p)
 
 int main()
 {    
-    size_t calls = int(4e6);                  // Number of samples used in Monte Carlo integration
+    size_t calls = int(40e6);                  // Number of samples used in Monte Carlo integration
     double limit = 0.1; //0.55                // Upper integration bound on Q1 and Q2
 
 
@@ -93,6 +93,7 @@ int main()
     r = gsl_rng_alloc (T);
 
     // Perform calculations
+    std::cout << "Calculating many integrals (may take a while...) " << std::endl << std::endl;
     {
     gsl_monte_miser_state *s = gsl_monte_miser_alloc (3);
     gsl_monte_miser_integrate (&G1, xl, xu, 3, calls, r, s,
