@@ -1,7 +1,7 @@
 
 
 # Compilation flags
-flags = -Wall -std=c++17 `root-config --libs` `root-config --cflags` -lgsl -lgslcblas
+flags = -Wall -std=c++17 `root-config --libs` `root-config --cflags` -lgsl -lgslcblas -Os
 
 # Header file
 inc = include/functions.h

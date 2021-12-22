@@ -110,11 +110,8 @@ int main()
 
     // Percent uncertainties in parameters a,b,c,d,e,gamma
     const double percent1 = 0.01;
-    const double percent2 = 0.005;
+    const double percent2 = 0.02;
 
-
-    // Parameters for form factor (vary by 0.5% and 0.25%)
-    struct params p0 = {a0, b0, c0, d0, e0, gamma_pi0};
 
     // + percent1
     struct params pa1 = {a0*(1+percent1), b0, c0, d0, e0, gamma_pi0};
@@ -203,31 +200,7 @@ int main()
     std::cout << "gamma :       " << (val_g3 - val_g4)/(2*percent2*gamma_pi0) << std::endl << std::endl;
 
 
-
     std::cout << std::endl;
 
     return 0;
 }
-
-
-// Calculating many integrals (may take a while...) 
-
-// Integration up to Q < 0.32
-
-// Partials - parameters varied by 2%
-// a     :       -3.3255397848918805e-11
-// b     :       2.5390081964826805e-12
-// c     :       9.6649245908106711e-13
-// d     :       4.5293740842159872e-13
-// e     :       1.1512917587814967e-13
-// gamma :       0.028049832503515056
-
-// Partials - parameters varied by 1%
-// a     :       -3.3720972009572263e-11
-// b     :       2.5927594821263501e-12
-// c     :       9.8838045327526882e-13
-// d     :       4.8949333115808346e-13
-// e     :       1.7264069732678279e-13
-// gamma :       0.02804983250351514
-
-
