@@ -20,7 +20,7 @@ const double h5 = 6.93;             // GeV^4
 const double h7 = -3.0*pow(Mv1*Mv2,4) / (4*pow(pi*F_pi,2));   // GeV^6
 
 // Form Factor Expansion Parameters
-const double gamma_pi0 = 7.7291993365804157745e-09;            // GeV TODO
+const double gamma_pi0 = 7.7291993e-09;            // GeV TODO
 const double a0 = 1/pow(Mv1,2) + 1/pow(Mv2,2) + h5/h7;
 const double b0 = 1/pow(Mv1,4) + 1/pow(Mv2,4) + 1/pow(Mv1*Mv2,2) + h5/h7*(1/pow(Mv1,2) + 1/pow(Mv2,2));
 const double c0 = pow(pow(Mv1,-2) + pow(Mv2,-2), 2) + h2/h7 + 2*h5/h7 * (pow(Mv1,-2) + pow(Mv2,-2));

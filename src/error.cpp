@@ -66,7 +66,7 @@ double f2_q6(double x[], size_t dim, void * p)
 int main()
 {    
     size_t calls = int(40e6);                  // Number of samples used in Monte Carlo integration
-    double limit = 0.1; //0.55                // Upper integration bound on Q1 and Q2
+    double limit = 0.55;                       // Upper integration bound on Q1 and Q2
 
 
     // Variables to store results
@@ -103,11 +103,11 @@ int main()
                                 &res2, &err2);
 
     // Uncomment this if you also want the accuracy of the Q^4 approximation
-    gsl_monte_miser_integrate (&G3, xl, xu, 3, calls, r, s,
-                            &res3, &err3);
+    // gsl_monte_miser_integrate (&G3, xl, xu, 3, calls, r, s,
+    //                         &res3, &err3);
 
-    gsl_monte_miser_integrate (&G4, xl, xu, 3, calls, r, s,
-                                &res4, &err4);
+    // gsl_monte_miser_integrate (&G4, xl, xu, 3, calls, r, s,
+    //                             &res4, &err4);
 
     gsl_monte_miser_integrate (&G5, xl, xu, 3, calls, r, s,
                             &res5, &err5);
@@ -127,20 +127,19 @@ int main()
     std::cout << "Integral 2 (LMD+V):\t" << res2 << "\tSigma: " <<  err2 << "\n";
     std::cout << std::endl;
     // Uncomment this(and the print statements below) if you also want the accuracy of the Q^4 approximation
-    std::cout << "Integral 1 (Q4)   :\t" << res3 << "\tSigma: " <<  err3 << "\n";
-    std::cout << "Integral 2 (Q4)   :\t" << res4 << "\tSigma: " <<  err4 << "\n";
-    std::cout << std::endl;
+    // std::cout << "Integral 1 (Q4)   :\t" << res3 << "\tSigma: " <<  err3 << "\n";
+    // std::cout << "Integral 2 (Q4)   :\t" << res4 << "\tSigma: " <<  err4 << "\n";
+    // std::cout << std::endl;
     std::cout << "Integral 1 (Q6)   :\t" << res5 << "\tSigma: " <<  err5 << "\n";
     std::cout << "Integral 2 (Q6)   :\t" << res6 << "\tSigma: " <<  err6 << "\n";
     std::cout << std::endl;
     std::cout << "Final LMD+V       :\t" << LMDV << "\n";
-    std::cout << "Final Q4          :\t" << Q4 << "\n";
+    // std::cout << "Final Q4          :\t" << Q4 << "\n";
     std::cout << "Final Q6          :\t" << Q6 << "\n\n";
     std::cout << std::endl;
-    std::cout << "% Error Q4 = " << 100 * abs(LMDV - Q4) / LMDV << "\n";
+    // std::cout << "% Error Q4 = " << 100 * abs(LMDV - Q4) / LMDV << "\n";
     std::cout << "% Error Q6 = " << 100 * abs(LMDV - Q6) / LMDV << "\n";
     }
-
 
 
 
