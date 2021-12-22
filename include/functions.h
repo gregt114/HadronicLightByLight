@@ -1,29 +1,31 @@
 
 #include <cmath>
 
-double const m_mu = 0.1056583745;   // GeV / c^2 (muon mass)
-double const mpion = 0.1349768;     // GeV / c^2 (neutral pion mass)
+const double pi = 3.1415926535897932384626433832795028841971693993751058209749445923078164062L;
 
-double const F_pi = 0.0924;         // GeV
-double const Mv1 = 0.77549;         // GeV
-double const Mv2 = 1.465;           // GeV
-double const h1 = 0.0;
+const double m_mu = 0.1056583745;   // GeV / c^2 (muon mass)
+const double mpion = 0.1349768;     // GeV / c^2 (neutral pion mass)
 
-double const alpha = 0.0072973525693; // Fine Structure Constant
+const double F_pi = 0.0924;         // GeV
+const double Mv1 = 0.77549;         // GeV
+const double Mv2 = 1.465;           // GeV
+const double h1 = 0.0;
+
+const double alpha = 0.0072973525693; // Fine Structure Constant
 
 // Form Factor Constants (LMD+V)
-double const deltasq = 0.2;         // GeV^2
-double const h2 = -4.0*(pow(Mv1,2) + pow(Mv2,2)) + deltasq*(16.0/9);
-double const h5 = 6.93;             // GeV^4
-double const h7 = -3.0*pow(Mv1*Mv2,4) / (4*pow(M_PI*F_pi,2));   // GeV^6
+const double deltasq = 0.2;         // GeV^2
+const double h2 = -4.0*(pow(Mv1,2) + pow(Mv2,2)) + deltasq*(16.0/9);
+const double h5 = 6.93;             // GeV^4
+const double h7 = -3.0*pow(Mv1*Mv2,4) / (4*pow(pi*F_pi,2));   // GeV^6
 
-// 2nd Form Factor (TFF - Approximation to LMD+V)
-double gamma_pi0 = 7.802e-9;            // GeV
-double a0 = 1/pow(Mv1,2) + 1/pow(Mv2,2) + h5/h7;
-double b0 = 1/pow(Mv1,4) + 1/pow(Mv2,4) + 1/pow(Mv1*Mv2,2) + h5/h7*(1/pow(Mv1,2) + 1/pow(Mv2,2)) ;
-double c0 = pow(pow(Mv1,-2) + pow(Mv2,-2), 2) + h2/h7 + 2*h5/h7 * (pow(Mv1,-2) + pow(Mv2,-2));
-double d0 = -4.59258;    // GeV^-6
-double e0 = -5.58268;    // GeV^-6
+// Form Factor Expansion Parameters
+const double gamma_pi0 = 7.7291993365804157745e-09;            // GeV TODO
+const double a0 = 1/pow(Mv1,2) + 1/pow(Mv2,2) + h5/h7;
+const double b0 = 1/pow(Mv1,4) + 1/pow(Mv2,4) + 1/pow(Mv1*Mv2,2) + h5/h7*(1/pow(Mv1,2) + 1/pow(Mv2,2));
+const double c0 = pow(pow(Mv1,-2) + pow(Mv2,-2), 2) + h2/h7 + 2*h5/h7 * (pow(Mv1,-2) + pow(Mv2,-2));
+const double d0 = -4.59258;    // GeV^-6
+const double e0 = -5.58268;    // GeV^-6
 
 
 double Rmi(double q)
@@ -106,7 +108,7 @@ double eye2(double q1, double q2, double tau)
 // 1st weighting function
 double w1(double q1, double q2, double tau)
 {
-    double result = (-2*M_PI/3) * sqrt(1-pow(tau,2));
+    double result = (-2*pi/3) * sqrt(1-pow(tau,2));
     result *= pow(q1*q2,3) / (pow(q2,2) + pow(mpion,2)) * eye1(q1,q2,tau);
     return result;
 }
@@ -116,7 +118,7 @@ double w2(double q1, double q2, double tau)
 {
     double q3sq = pow(q1,2) + 2*q1*q2*tau + pow(q2,2);
     
-    double result = (-2*M_PI/3) * sqrt(1-pow(tau,2));
+    double result = (-2*pi/3) * sqrt(1-pow(tau,2));
     result *= pow(q1*q2,3) / (q3sq + pow(mpion,2)) * eye2(q1,q2,tau);   
     return result;
 }
@@ -150,11 +152,10 @@ double integrand2(double q1, double q2, double tau)
 ////////////////////////////////////////////////////////////////////////////////////
 
 // Q^6 approximation of form factor
-double form_factor_q6(double q1sq, double q2sq, double a=a0, double b=b0, double c=c0, double d=d0, double e=e0)
+double form_factor_q6(double q1sq, double q2sq, double a=a0, double b=b0, double c=c0, double d=d0, double e=e0, double gamma=gamma_pi0)
 {
 
-    // double factor = sqrt(4*gamma_pi0 / (M_PI * pow(alpha,2) * pow(mpion,3)));
-    double factor = 0.27413740;
+    double factor = sqrt(4*gamma / (pi * pow(alpha,2) * pow(mpion,3)));
     double result = factor * (1 - a*(q1sq + q2sq) + b*(pow(q1sq,2) + pow(q2sq,2)) + c*q1sq*q2sq + d*(pow(q1sq,3)+pow(q2sq,3)) + e*(pow(q1sq,4)*q2sq + q1sq*pow(q2sq,2)));
     return result;
 }
@@ -163,8 +164,7 @@ double form_factor_q6(double q1sq, double q2sq, double a=a0, double b=b0, double
 double form_factor_q4(double q1sq, double q2sq, double a=a0, double b=b0, double c=c0)
 {
 
-    // double factor = sqrt(4*gamma_pi0 / (M_PI * pow(alpha,2) * pow(mpion,3)));
-    double factor = 0.27413740;
+    double factor = sqrt(4*gamma_pi0 / (pi * pow(alpha,2) * pow(mpion,3)));
     double result = factor * (1 - a*(q1sq + q2sq) + b*(pow(q1sq,2) + pow(q2sq,2)) + c*q1sq*q2sq);
     return result;
 }
@@ -182,15 +182,15 @@ double integrand2_q4(double q1, double q2, double tau, double a=a0, double b=b0,
 }
 
 // Integrand1 using Q^6 approximation
-double integrand1_q6(double q1, double q2, double tau, double a=a0, double b=b0, double c=c0, double d=d0, double e=e0)
+double integrand1_q6(double q1, double q2, double tau, double a=a0, double b=b0, double c=c0, double d=d0, double e=e0, double gamma=gamma_pi0)
 {
-    return w1(q1,q2,tau)*form_factor_q6(pow(q1,2), (pow(q1,2)+pow(q2,2)+2*q1*q2*tau), a, b, c, d, e)*form_factor_q6(pow(q2,2),0.0, a, b, c, d, e);
+    return w1(q1,q2,tau)*form_factor_q6(pow(q1,2), (pow(q1,2)+pow(q2,2)+2*q1*q2*tau), a, b, c, d, e, gamma)*form_factor_q6(pow(q2,2),0.0, a, b, c, d, e, gamma);
 }
 
 // Integrand2 using Q^6 approximation
-double integrand2_q6(double q1, double q2, double tau, double a=a0, double b=b0, double c=c0, double d=d0, double e=e0)
+double integrand2_q6(double q1, double q2, double tau, double a=a0, double b=b0, double c=c0, double d=d0, double e=e0, double gamma=gamma_pi0)
 {
-    return w2(q1,q2,tau)*form_factor_q6(pow(q1,2), pow(q2,2), a, b, c, d, e)*form_factor_q6((pow(q1,2)+pow(q2,2)+2*q1*q2*tau),0.0, a, b, c, d, e);
+    return w2(q1,q2,tau)*form_factor_q6(pow(q1,2), pow(q2,2), a, b, c, d, e, gamma)*form_factor_q6((pow(q1,2)+pow(q2,2)+2*q1*q2*tau),0.0, a, b, c, d, e, gamma);
 }
 
 
