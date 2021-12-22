@@ -65,7 +65,7 @@ double f2_q6(double x[], size_t dim, void * p)
 
 int main()
 {    
-    size_t calls = int(4e6);                  // Number of samples used in Monte Carlo integration
+    size_t calls = int(40e6);                 // Number of samples used in Monte Carlo integration
     double limit = 0.1;                       // Upper integration bound on Q1 and Q2
 
 
