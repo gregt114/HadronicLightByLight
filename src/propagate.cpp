@@ -105,102 +105,47 @@ int main()
 {
 
     const int samples = int(10e6);     // Number of samples used in integration
-    const double cutoff = 0.32;       // Upper bound on Q1 and Q2    
+    const double cutoff = 0.32;        // Upper bound on Q1 and Q2    
 
 
-    // Percent uncertainties in parameters a,b,c,d,e,gamma
-    const double percent1 = 0.01;
-    const double percent2 = 0.02;
-
-
-    // + percent1
-    struct params pa1 = {a0*(1+percent1), b0, c0, d0, e0, gamma_pi0};
-    struct params pb1 = {a0, b0*(1+percent1), c0, d0, e0, gamma_pi0};
-    struct params pc1 = {a0, b0, c0*(1+percent1), d0, e0, gamma_pi0};
-    struct params pd1 = {a0, b0, c0, d0*(1+percent1), e0, gamma_pi0};
-    struct params pe1 = {a0, b0, c0, d0, e0*(1+percent1), gamma_pi0};
-    struct params pg1 = {a0, b0, c0, d0, e0, gamma_pi0*(1+percent1)};
-
-    // - percent1
-    struct params pa2 = {a0*(1-percent1), b0, c0, d0, e0, gamma_pi0};
-    struct params pb2 = {a0, b0*(1-percent1), c0, d0, e0, gamma_pi0};
-    struct params pc2 = {a0, b0, c0*(1-percent1), d0, e0, gamma_pi0};
-    struct params pd2 = {a0, b0, c0, d0*(1-percent1), e0, gamma_pi0};
-    struct params pe2 = {a0, b0, c0, d0, e0*(1-percent1), gamma_pi0};
-    struct params pg2 = {a0, b0, c0, d0, e0, gamma_pi0*(1-percent1)};
-
-    // + percent2
-    struct params pa3 = {a0*(1+percent2), b0, c0, d0, e0, gamma_pi0};
-    struct params pb3 = {a0, b0*(1+percent2), c0, d0, e0, gamma_pi0};
-    struct params pc3 = {a0, b0, c0*(1+percent2), d0, e0, gamma_pi0};
-    struct params pd3 = {a0, b0, c0, d0*(1+percent2), e0, gamma_pi0};
-    struct params pe3 = {a0, b0, c0, d0, e0*(1+percent2), gamma_pi0};
-    struct params pg3 = {a0, b0, c0, d0, e0, gamma_pi0*(1+percent2)};
-
-    // - percent2
-    struct params pa4 = {a0*(1-percent2), b0, c0, d0, e0, gamma_pi0};
-    struct params pb4 = {a0, b0*(1-percent2), c0, d0, e0, gamma_pi0};
-    struct params pc4 = {a0, b0, c0*(1-percent2), d0, e0, gamma_pi0};
-    struct params pd4 = {a0, b0, c0, d0*(1-percent2), e0, gamma_pi0};
-    struct params pe4 = {a0, b0, c0, d0, e0*(1-percent2), gamma_pi0};
-    struct params pg4 = {a0, b0, c0, d0, e0, gamma_pi0*(1-percent2)};
-    
-
-    
     std::cout << "Calculating many integrals (may take a while...) " << std::endl << std::endl;
+    std::cout.precision(15);
 
-    // Values of integrals varying given parameter by given percent (takes ~ 5 min)
-    double val_a1 = mcIntegrate(&pa1, samples, cutoff);
-    double val_b1 = mcIntegrate(&pb1, samples, cutoff);
-    double val_c1 = mcIntegrate(&pc1, samples, cutoff);
-    double val_d1 = mcIntegrate(&pd1, samples, cutoff);
-    double val_e1 = mcIntegrate(&pe1, samples, cutoff);
-    double val_g1 = mcIntegrate(&pg1, samples, cutoff);
+    const double percents[] = {0.01, 0.02};             // Percent uncertainties in parameters a,b,c,d,e,gamma
+    char paramNames[] = {'a', 'b', 'c', 'd', 'e', 'g'}; // Labels for parameters
+    double avgs[] = {a0, b0, c0, d0, e0, gamma_pi0};    // Mean values for parameters
 
-    double val_a2 = mcIntegrate(&pa2, samples, cutoff);
-    double val_b2 = mcIntegrate(&pb2, samples, cutoff);
-    double val_c2 = mcIntegrate(&pc2, samples, cutoff);
-    double val_d2 = mcIntegrate(&pd2, samples, cutoff);
-    double val_e2 = mcIntegrate(&pe2, samples, cutoff);
-    double val_g2 = mcIntegrate(&pg2, samples, cutoff);
+    for(unsigned i=0; i < sizeof(percents) / sizeof(percents[0]); i++){ // Iterate over each % in percents[]
+        
+        double percent = percents[i];
+        std::cout << "Partials - parameters varied by " << 100*percent << "\%\n";
 
-    double val_a3 = mcIntegrate(&pa3, samples, cutoff);
-    double val_b3 = mcIntegrate(&pb3, samples, cutoff);
-    double val_c3 = mcIntegrate(&pc3, samples, cutoff);
-    double val_d3 = mcIntegrate(&pd3, samples, cutoff);
-    double val_e3 = mcIntegrate(&pe3, samples, cutoff);
-    double val_g3 = mcIntegrate(&pg3, samples, cutoff);
+        struct params plus_p[] = {  // + percent
+            {a0*(1+percent), b0, c0, d0, e0, gamma_pi0},
+            {a0, b0*(1+percent), c0, d0, e0, gamma_pi0},
+            {a0, b0, c0*(1+percent), d0, e0, gamma_pi0},
+            {a0, b0, c0, d0*(1+percent), e0, gamma_pi0},
+            {a0, b0, c0, d0, e0*(1+percent), gamma_pi0},
+            {a0, b0, c0, d0, e0, gamma_pi0*(1+percent)}
+        };
 
-    double val_a4 = mcIntegrate(&pa4, samples, cutoff);
-    double val_b4 = mcIntegrate(&pb4, samples, cutoff);
-    double val_c4 = mcIntegrate(&pc4, samples, cutoff);
-    double val_d4 = mcIntegrate(&pd4, samples, cutoff);
-    double val_e4 = mcIntegrate(&pe4, samples, cutoff);
-    double val_g4 = mcIntegrate(&pg4, samples, cutoff);
+        struct params minus_p[] = {  // - percent
+            {a0*(1-percent), b0, c0, d0, e0, gamma_pi0},
+            {a0, b0*(1-percent), c0, d0, e0, gamma_pi0},
+            {a0, b0, c0*(1-percent), d0, e0, gamma_pi0},
+            {a0, b0, c0, d0*(1-percent), e0, gamma_pi0},
+            {a0, b0, c0, d0, e0*(1-percent), gamma_pi0},
+            {a0, b0, c0, d0, e0, gamma_pi0*(1-percent)}
+        };
 
-    std::cout << "Integration up to Q < " << cutoff << std::endl << std::endl;
-
-    std::cout.precision(17);    // Decimal precision for printed output
-
-    // Partial derivatives using double sided finite difference
-    std::cout << "Partials - parameters varied by " << 100*percent1 << "\%\n";
-    std::cout << "a     :       " << (val_a1 - val_a2)/(2*percent1*a0) << std::endl;
-    std::cout << "b     :       " << (val_b1 - val_b2)/(2*percent1*b0) << std::endl;
-    std::cout << "c     :       " << (val_c1 - val_c2)/(2*percent1*c0) << std::endl;
-    std::cout << "d     :       " << (val_d1 - val_d2)/(2*percent1*d0) << std::endl;
-    std::cout << "e     :       " << (val_e1 - val_e2)/(2*percent1*e0) << std::endl;
-    std::cout << "gamma :       " << (val_g1 - val_g2)/(2*percent1*gamma_pi0) << std::endl << std::endl;
-
-    std::cout << "Partials - parameters varied by " << 100*percent2 << "\%\n";
-    std::cout << "a     :       " << (val_a3 - val_a4)/(2*percent2*a0) << std::endl;
-    std::cout << "b     :       " << (val_b3 - val_b4)/(2*percent2*b0) << std::endl;
-    std::cout << "c     :       " << (val_c3 - val_c4)/(2*percent2*c0) << std::endl;
-    std::cout << "d     :       " << (val_d3 - val_d4)/(2*percent2*d0) << std::endl;
-    std::cout << "e     :       " << (val_e3 - val_e4)/(2*percent2*e0) << std::endl;
-    std::cout << "gamma :       " << (val_g3 - val_g4)/(2*percent2*gamma_pi0) << std::endl << std::endl;
-
-
-    std::cout << std::endl;
+        for(unsigned j=0; j < sizeof(plus_p) / sizeof(plus_p[0]); j++){ // Iterate over each parameter for given %
+            double val1 = mcIntegrate(&plus_p[j], samples, cutoff);
+            double val2 = mcIntegrate(&minus_p[j], samples, cutoff);
+            std::cout << paramNames[j]  << "\t:\t"<< (val1 - val2)/(2*percent*avgs[j]) << std::endl;
+        }
+        std::cout << std::endl << std::endl;
+    }
+    
 
     return 0;
 }
