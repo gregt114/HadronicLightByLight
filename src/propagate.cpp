@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <cmath>
+#include <thread>
 
 #include <random>
 #include <chrono>
@@ -47,8 +48,9 @@ Function that calculates a^(HLbL) using Monte Carlo integration and the given pa
 *p      - pointer to params structure that contains a,b,c,d,e values
 samples - number of samples used during integration
 bound   - the upper limit of integration on Q1 and Q2
+res     - pointer to double to store result in
 */
-double mcIntegrate(struct params *p, int samples, double bound)
+double mcIntegrate(struct params *p, int samples, double bound, double *res)
 {
     // Variables to store results of integration
     double res1, res2;
@@ -91,12 +93,9 @@ double mcIntegrate(struct params *p, int samples, double bound)
     gsl_monte_miser_free (s);
     }
 
-    // Return final result
-    return pow(alpha/M_PI, 3) * (res1 + res2);
+    *res = pow(alpha/M_PI, 3) * (res1 + res2);
     
 }
-
-
 
 
 
@@ -139,8 +138,11 @@ int main()
         };
 
         for(unsigned j=0; j < sizeof(plus_p) / sizeof(plus_p[0]); j++){ // Iterate over each parameter for given %
-            double val1 = mcIntegrate(&plus_p[j], samples, cutoff);
-            double val2 = mcIntegrate(&minus_p[j], samples, cutoff);
+            double val1, val2;
+            std::thread first(mcIntegrate, &plus_p[j], samples, cutoff, &val1);
+            std::thread second(mcIntegrate, &minus_p[j], samples, cutoff, &val2);
+            first.join();
+            second.join();
             std::cout << paramNames[j]  << "\t:\t"<< (val1 - val2)/(2*percent*avgs[j]) << std::endl;
         }
         std::cout << std::endl << std::endl;
