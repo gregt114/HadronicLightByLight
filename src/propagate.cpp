@@ -110,7 +110,7 @@ int main()
     std::cout << "Calculating many integrals (may take a while...) " << std::endl << std::endl;
     std::cout.precision(15);
 
-    const double percents[] = {0.01, 0.02};             // Percent uncertainties in parameters a,b,c,d,e,gamma
+    const double percents[] = {0.0025, 0.005, 0.01, 0.02};             // Percent uncertainties in parameters a,b,c,d,e,gamma
     char paramNames[] = {'a', 'b', 'c', 'd', 'e', 'g'}; // Labels for parameters
     double avgs[] = {a0, b0, c0, d0, e0, gamma_pi0};    // Mean values for parameters
 
