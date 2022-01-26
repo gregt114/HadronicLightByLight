@@ -52,7 +52,7 @@ int main()
   double xu[3] = { limit, limit, 1 };
 
   // Number of samples used in Monte Carlo integration
-  size_t calls = int(4e7);
+  size_t calls = int(20e6);
 
 
   // Setup for GSL Monte Carlo algorithm
@@ -69,19 +69,19 @@ int main()
   {
     gsl_monte_vegas_state *s = gsl_monte_vegas_alloc (3);
 
-    gsl_monte_vegas_integrate (&G, xl, xu, 3, 10000, r, s,
+    gsl_monte_vegas_integrate (&G, xl, xu, 3, calls, r, s,
                                &res, &err);
 
-    gsl_monte_vegas_integrate (&G2, xl, xu, 3, 10000, r, s,
+    gsl_monte_vegas_integrate (&G2, xl, xu, 3, calls, r, s,
                             &res2, &err2);
 
     printf ("converging...\n");
 
     do
       {
-        gsl_monte_vegas_integrate (&G, xl, xu, 3, calls/5, r, s,
+        gsl_monte_vegas_integrate (&G, xl, xu, 3, calls/4, r, s,
                                    &res, &err);
-        gsl_monte_vegas_integrate (&G2, xl, xu, 3, calls/5, r, s,
+        gsl_monte_vegas_integrate (&G2, xl, xu, 3, calls/4, r, s,
                                    &res2, &err2);
       }
     while (fabs (gsl_monte_vegas_chisq (s) - 1.0) > 0.5);
