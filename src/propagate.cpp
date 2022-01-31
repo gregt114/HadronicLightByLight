@@ -104,7 +104,7 @@ int main()
 {
 
     const int samples = int(10e6);     // Number of samples used in integration
-    const double cutoff = 0.32;        // Upper bound on Q1 and Q2    
+    const double cutoff = 0.55;        // Upper bound on Q1 and Q2    
 
 
     std::cout << "Calculating many integrals (may take a while...) " << std::endl << std::endl;

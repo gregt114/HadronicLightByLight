@@ -3,4 +3,8 @@ functions.h.gch
 main
 error
 propagate
+cdata
+dataLMDV.txt
+dataQ4.txt
+dataQ6.txt
 .vscode/
